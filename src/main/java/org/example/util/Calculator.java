@@ -1,9 +1,9 @@
-package org.example;
+package org.example.util;
 
 import java.util.Scanner;
 
 public class Calculator {
-    public static void main(String[] args) {
+    public void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         // boolean check = false;
         int firstNumber = 0, secondNumber = 0;
@@ -41,26 +41,26 @@ public class Calculator {
 
     }
 
-    public static int sum(int x,int y) {
+      int sum(int x,int y) {
         return x + y;
     }
-    public static int minus(int x, int y) {
+      int minus(int x, int y) {
         return x - y;
     }
 
-    public static int multiplication(int x, int y) {
+      int multiplication(int x, int y) {
         return x * y;
     }
 
-    public static int division(int x, int y) {
+      int division(int x, int y) {
         return x / y;
     }
 
-    public static void res(int result) {
+      void res(int result) {
         System.out.println("Ваш результат равен: " + result);
     }
 
-    public static int check(Scanner scanner) { // я тут делал так public static int check(Scanner scanner, int x)
+      int check(Scanner scanner) { // я тут делал так public static int check(Scanner scanner, int x)
         if(scanner.hasNextInt())
             return scanner.nextInt(); // тут так x = scanner.nextInt()
         else {

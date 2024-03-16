@@ -16,32 +16,35 @@ class CalculatorTest {
 
     @Test
     void sum(){
-        int sum = calculator.sum(15,12);
-        Assertions.assertEquals(27,sum);
+        double sum = calculator.sum(15,12.2);
+        Assertions.assertEquals(27.2,sum);
     }
 
     @Test
     void minus(){
-        int minus = calculator.minus(15,12);
-        Assertions.assertEquals(3,minus);
+        double result = calculator.minus(15.0, 12.1);
+        double expected = 2.9;
+        double delta = 0.0001;
+
+        Assertions.assertEquals(expected, result, delta);
     }
 
     @Test
     void multiplication(){
-        int multiplication = calculator.multiplication(15,12);
-        Assertions.assertEquals(180,multiplication);
+        double multiplication = Calculator.multiplication(15.1,12);
+        Assertions.assertEquals(181.2,multiplication);
     }
 
     @Test
     void division(){
-        int division = calculator.division(15,12);
-        Assertions.assertEquals(1,division);
+        double division = Calculator.division(15,12);
+        Assertions.assertEquals(1.25,division);
     }
 
     @Test
     void div_byZero(){
-        int division = calculator.division(15,12);
-        Assertions.assertThrows(ArithmeticException.class, ()  ->  calculator.division(5,0));
+        //  double division = calculator.division(15,12);
+        Assertions.assertThrows(ArithmeticException.class, ()  ->  Calculator.division(5.0,0.0));
     }
 
 }

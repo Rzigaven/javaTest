@@ -3,73 +3,105 @@ package org.example.util;
 import java.util.Scanner;
 
 public class Calculator {
-    public void main(String[] args) {
+    public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        // boolean check = false;
-        int firstNumber = 0, secondNumber = 0;
+        double firstNumber, secondNumber, result;
+
         System.out.print("Введите первое число: ");
-        firstNumber = check(scanner); // а тут check(scanner, firstNumber) было всегда 0
+        firstNumber = checkNumbers(scanner);
 
-        System.out.print("Введите второе число: ");
-        secondNumber = check(scanner); // а тут check(scanner, secondNumber) было всегда 0
+        System.out.println("Выберите операцию (+, -, *, /)");
+        String math = scanner.next();
 
-        System.out.println("Введите арифметическое действие: ");
-        String math = scanner.nextLine();
-        math = scanner.nextLine();
-
-        switch (math) {
-            case "+" :
-                res(sum(firstNumber,secondNumber));
-                break;
-            case "-" :
-                res(minus(firstNumber,secondNumber));
-                break;
-            case "*" :
-                res(multiplication(firstNumber,secondNumber));
-                break;
-            case "/" :
-                if(secondNumber != 0) {
-                    res(division(firstNumber,secondNumber));
-                }
-                else System.out.println("На 0 делить нелья");
-                break;
-            default :
-                System.out.println("Вы ввели некорректную операцию");
-                break;
+        while (!math.matches("[+\\-*/]")) {
+            System.out.println("Вы ввели некорректную операцию, введите корректную операцию (+, -, *, /):");
+            math = scanner.next();
         }
 
+        System.out.print("Введите второе число: ");
+        secondNumber = checkNumbers(scanner);
+
+        result = switch (math) {
+            case "+" -> sum(firstNumber, secondNumber);
+            case "-" -> minus(firstNumber, secondNumber);
+            case "*" -> multiplication(firstNumber, secondNumber);
+            case "/" -> {
+                if (secondNumber != 0) {
+                    yield division(firstNumber, secondNumber);
+                } else {
+                    System.out.println("На 0 делить нелья");
+                    yield 0;
+                }
+            }
+            default -> throw new IllegalStateException("Неверная операция: " + math);
+        };
+
+        while (true) {
+            System.out.println("Текущий результат: " + result);
+            System.out.println("Выберите операцию (+, -, *, /) или введите 'exit' для выхода:");
+
+            math = scanner.next();
+
+            if (math.equals("exit")) {
+                break;
+            }
+
+            if (!math.matches("[+\\-*/]")) {
+                System.out.println("Вы ввели некорректную операцию.");
+                continue;
+            }
+
+            System.out.print("Введите число: ");
+            double nextNumber = checkNumbers(scanner);
+
+            result = switch (math) {
+                case "+" -> sum(result, nextNumber);
+                case "-" -> minus(result, nextNumber);
+                case "*" -> multiplication(result, nextNumber);
+                case "/" -> {
+                    if (nextNumber != 0) {
+                        yield division(result, nextNumber);
+                    } else {
+                        System.out.println("На 0 делить нелья");
+                        yield 0;
+                    }
+                }
+                default -> throw new IllegalStateException("Неверная операция: " + math);
+            };
+        }
+        System.out.println("Итоговый результат: " + result);
+
 
     }
 
-      int sum(int x,int y) {
+
+    static double sum(double x, double y) {
         return x + y;
     }
-      int minus(int x, int y) {
+
+    static double minus(double x, double y) {
         return x - y;
     }
 
-      int multiplication(int x, int y) {
+    static double multiplication(double x, double y) {
         return x * y;
     }
 
-      int division(int x, int y) {
+    static double division(double x, double y) {
+        if (y == 0) {
+            throw new ArithmeticException("Деление на ноль");
+        }
         return x / y;
     }
 
-      void res(int result) {
-        System.out.println("Ваш результат равен: " + result);
-    }
-
-      int check(Scanner scanner) { // я тут делал так public static int check(Scanner scanner, int x)
-        if(scanner.hasNextInt())
-            return scanner.nextInt(); // тут так x = scanner.nextInt()
-        else {
-            System.out.println("Вы ввели не число, введите число");
-            System.exit(0);
-            return 0;
+    static double checkNumbers(Scanner scanner) {
+        while (!scanner.hasNextDouble()) {
+            System.out.println("Вы ввели не число, введите число:");
+            scanner.next(); // очистка ввода перед повторным запросом
         }
-
+        return scanner.nextDouble();
     }
+
 }
 
 

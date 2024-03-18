@@ -4,6 +4,8 @@ import org.example.util.Calculator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.ByteArrayInputStream;
 import java.util.Scanner;
@@ -19,36 +21,39 @@ class CalculatorTest {
         calculator = new Calculator();
     }
 
-    @Test
-    void sum() {
-        double sum = calculator.sum(15, 12.2);
-        assertEquals(27.2, sum);
+    @ParameterizedTest
+    @ValueSource(doubles = {1.2, 2.5, 10, 9})
+    void sum(Double arg) {
+        double sum = calculator.sum(arg, arg);
+        assertEquals(2 * arg, sum);
     }
 
-    @Test
-    void minus() {
-        double result = calculator.minus(15.0, 12.1);
-        double expected = 2.9;
+    @ParameterizedTest
+    @ValueSource(doubles = {1.2, 2.5, 10, 9})
+    void minus(Double arg) {
+        double result = calculator.minus(arg, arg);
         double delta = 0.0001;
 
-        assertEquals(expected, result, delta);
+        assertEquals(0.0, result, delta);
     }
 
-    @Test
-    void multiplication() {
-        double multiplication = Calculator.multiplication(15.1, 12);
-        assertEquals(181.2, multiplication);
+    @ParameterizedTest
+    @ValueSource(doubles = {1.2, 2.5, 10, 9})
+    void multiplication(Double arg) {
+        double multiplication = Calculator.multiplication(arg, arg);
+        assertEquals(arg * arg, multiplication);
     }
 
-    @Test
-    void division() {
-        double division = Calculator.division(15, 12);
-        assertEquals(1.25, division);
+    @ParameterizedTest
+    @ValueSource(doubles = {1.2, 2.5, 10, 9})
+    void division(Double arg) {
+        double division = Calculator.division(arg, arg);
+        assertEquals(1.0, division);
     }
 
-    @Test
-    void div_byZero() {
-        //  double division = calculator.division(15,12);
-        Assertions.assertThrows(ArithmeticException.class, () -> Calculator.division(5.0, 0.0));
+    @ParameterizedTest
+    @ValueSource(doubles = {1.2, 2.5, 10, 9})
+    void div_byZero(double arg) {
+        Assertions.assertThrows(ArithmeticException.class, () -> Calculator.division(arg, 0.0));
     }
 }

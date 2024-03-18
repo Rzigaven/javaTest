@@ -5,11 +5,32 @@ import java.util.Scanner;
 public class Calculator {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        double firstNumber, secondNumber, result;
+        double result = calculateRes(scanner);
+        System.out.println("Итоговый результат: " + result);
 
-        System.out.print("Введите первое число: ");
-        firstNumber = checkNumbers(scanner);
 
+    }
+
+    static double calculateRes(Scanner scanner) {
+        double firstNumber = getFirstNumber(scanner);
+        double secondNumber = getSecondNumber(scanner);
+        String math = getMath(scanner);
+        double result = getRes(firstNumber, math, secondNumber);
+        result = checkWhile(scanner, result);
+        return result;
+    }
+
+    static double getFirstNumber(Scanner scanner) {
+        System.out.println("Введите первое число: ");
+        return checkNumbers(scanner);
+    }
+
+    static double getSecondNumber(Scanner scanner) {
+        System.out.println("Введите второе число: ");
+        return checkNumbers(scanner);
+    }
+
+    static String getMath(Scanner scanner) {
         System.out.println("Выберите операцию (+, -, *, /)");
         String math = scanner.next();
 
@@ -17,17 +38,17 @@ public class Calculator {
             System.out.println("Вы ввели некорректную операцию, введите корректную операцию (+, -, *, /):");
             math = scanner.next();
         }
+        return math;
+    }
 
-        System.out.print("Введите второе число: ");
-        secondNumber = checkNumbers(scanner);
-
+    static double getRes(double result, String math, double nextNumber) {
         result = switch (math) {
-            case "+" -> sum(firstNumber, secondNumber);
-            case "-" -> minus(firstNumber, secondNumber);
-            case "*" -> multiplication(firstNumber, secondNumber);
+            case "+" -> sum(result, nextNumber);
+            case "-" -> minus(result, nextNumber);
+            case "*" -> multiplication(result, nextNumber);
             case "/" -> {
-                if (secondNumber != 0) {
-                    yield division(firstNumber, secondNumber);
+                if (nextNumber != 0) {
+                    yield division(result, nextNumber);
                 } else {
                     System.out.println("На 0 делить нелья");
                     yield 0;
@@ -35,12 +56,15 @@ public class Calculator {
             }
             default -> throw new IllegalStateException("Неверная операция: " + math);
         };
+        return result;
+    }
 
+    static double checkWhile(Scanner scanner, double result) {
         while (true) {
             System.out.println("Текущий результат: " + result);
             System.out.println("Выберите операцию (+, -, *, /) или введите 'exit' для выхода:");
 
-            math = scanner.next();
+            String math = scanner.next();
 
             if (math.equals("exit")) {
                 break;
@@ -54,26 +78,10 @@ public class Calculator {
             System.out.print("Введите число: ");
             double nextNumber = checkNumbers(scanner);
 
-            result = switch (math) {
-                case "+" -> sum(result, nextNumber);
-                case "-" -> minus(result, nextNumber);
-                case "*" -> multiplication(result, nextNumber);
-                case "/" -> {
-                    if (nextNumber != 0) {
-                        yield division(result, nextNumber);
-                    } else {
-                        System.out.println("На 0 делить нелья");
-                        yield 0;
-                    }
-                }
-                default -> throw new IllegalStateException("Неверная операция: " + math);
-            };
+            result = getRes(result, math, nextNumber);
         }
-        System.out.println("Итоговый результат: " + result);
-
-
+        return result;
     }
-
 
     static double sum(double x, double y) {
         return x + y;
@@ -101,6 +109,7 @@ public class Calculator {
         }
         return scanner.nextDouble();
     }
+
 
 }
 
